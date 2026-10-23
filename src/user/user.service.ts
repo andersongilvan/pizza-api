@@ -4,7 +4,6 @@ import { hash } from 'bcryptjs'
 import { Repository } from 'typeorm'
 import { Pagination, PaginationParams } from '../common/pagination'
 import { User } from '../entities/user.entity'
-import { UserRole } from '../enums/user-role.enum'
 import { CreateUserDto, UpdateUserDto } from './dto'
 
 @Injectable()
@@ -27,7 +26,7 @@ export class UserService {
     const user = this.userRepo.create({
       name,
       email,
-      role: role ? role : UserRole.STAFF,
+      role,
       passwordHash,
     })
 
