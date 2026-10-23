@@ -1,5 +1,6 @@
-import { ExecutionContext, Injectable } from '@nestjs/common'
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
+import { TokenExpiredError } from '@nestjs/jwt'
 import { AuthGuard } from '@nestjs/passport'
 import { Observable } from 'rxjs'
 import { IS_PUBLIC_KEY } from '../public.decorator'
@@ -21,5 +22,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     return super.canActivate(context)
+  }
+
+  handleRequest<TUser>(err: any, user: TUser, info: any): TUser {
+    if (info instanceof TokenExpiredError) {
+      throw new UnauthorizedException('Token expirado')
+    }
+
+    if (err || !user) {
+      throw err || new UnauthorizedException()
+    }
+
+    return user
   }
 }
