@@ -6,15 +6,18 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  Patch,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common'
+import { RequiredRoles } from '../auth/required-rules.decorator'
 import { PaginationParams } from '../common/pagination'
+import { UserRole } from '../enums/user-role.enum'
 import { CreateUserDto, UpdateUserDto } from './dto'
 import { UserService } from './user.service'
 
+@RequiredRoles(UserRole.ADMIN)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
