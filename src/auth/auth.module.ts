@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { User } from '../entities/user.entity'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
+import { RulesGuard } from './rules.guard'
 import { JwtAuthGuard } from './strategy/jwt-auth.guard'
 import { JwtRefreshStrategy } from './strategy/jwt-refresh.strategy'
 import { JwtStrategy } from './strategy/jwt.strategy'
@@ -30,9 +31,14 @@ import { JwtStrategy } from './strategy/jwt.strategy'
     AuthService,
     JwtStrategy,
     JwtRefreshStrategy,
+    RulesGuard,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RulesGuard,
     },
   ],
   controllers: [AuthController],
